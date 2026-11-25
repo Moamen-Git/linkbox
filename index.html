@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100F18">
+<title>صندوق الروابط</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{
+  --bg:#100F18; --surface:#1A1824; --surface2:#262338; --ink:#ECE9F7; --muted:#A8A2C4; --line:#3A3656;
+  --accent:#6D4FE0; --accent-ink:#FFFFFF; --accent-soft:#2A2352; --accent-fg:#C4B7FF;
+  --warn:#F4B35E; --warn-soft:#3A2A10; --bad:#FF8A7E; --bad-soft:#3D1A16; --ok:#6EE7A0;
+  --font:'Cairo','Segoe UI',Tahoma,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font); font-size:15px; line-height:1.55; direction:rtl;
+  padding-block:16px 96px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  min-height:100vh;
+}
+.wrap{max-width:560px; margin:0 auto; display:flex; flex-direction:column; gap:14px; min-width:0}
+h1,h2,h3,p{margin:0}
+h1{font-size:22px; font-weight:800; text-wrap:balance}
+h2{font-size:17px; font-weight:800}
+h3{font-size:16px; font-weight:800; word-break:break-word}
+.muted{color:var(--muted); font-size:13px}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.topbar .tt{min-width:0; flex:1}
+.topbar h1{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+button,input,textarea{font-family:inherit; font-size:15px; color:var(--ink)}
+.ibtn{width:44px; height:44px; flex:none; border-radius:12px; background:var(--surface); border:1px solid var(--line); font-size:19px; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.ibtn:active{background:var(--surface2)}
+.btn{min-height:46px; padding:10px 16px; border-radius:12px; border:1px solid var(--line); background:var(--surface2); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px}
+.btn.pri{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.btn.bad{background:var(--bad-soft); border-color:var(--bad); color:var(--bad)}
+.btn.block{width:100%}
+.btn:active{filter:brightness(1.15)}
+.btn:disabled{opacity:.5}
+input[type=text],input[type=password],input[type=search],textarea{
+  width:100%; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; outline:none; min-height:46px
+}
+textarea{resize:vertical; min-height:84px}
+input:focus,textarea:focus{border-color:var(--accent)}
+label.f{display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted); font-weight:600}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; min-width:0}
+.banner{background:var(--warn-soft); border:1px solid var(--warn); color:var(--warn); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:10px; justify-content:space-between; flex-wrap:wrap}
+.banner b{font-weight:700; color:var(--ink)}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.lc{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 14px 12px; text-align:right; cursor:pointer; min-height:104px; display:flex; flex-direction:column; justify-content:space-between; gap:10px; min-width:0}
+.lc:active{background:var(--surface2)}
+.lc .bar{position:absolute; top:0; right:16px; left:16px; height:4px; border-radius:0 0 4px 4px}
+.lc .nm{font-weight:800; font-size:16px; word-break:break-word; padding-top:4px}
+.lc .meta{display:flex; align-items:center; justify-content:space-between; color:var(--muted); font-size:13px}
+.lc.add{border-style:dashed; align-items:center; justify-content:center; color:var(--accent-fg); font-weight:700; background:transparent}
+.item{width:100%; text-align:right; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; display:flex; gap:10px; align-items:center; cursor:pointer; min-width:0}
+.item:active{background:var(--surface2)}
+.it-main{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px}
+.it-title{font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.it-url{font-size:12px; color:var(--accent-fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; direction:ltr; text-align:right}
+.it-note{font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.it-dots{color:var(--muted); font-size:20px; flex:none}
+.tag{font-size:11px; background:var(--accent-soft); color:var(--accent-fg); border-radius:8px; padding:1px 8px; align-self:flex-start; margin-bottom:2px}
+.list{display:flex; flex-direction:column; gap:10px}
+.row{display:flex; gap:10px; flex-wrap:wrap}
+.row>*{flex:1 1 140px}
+.empty{text-align:center; color:var(--muted); padding:34px 10px; border:1px dashed var(--line); border-radius:14px}
+.empty b{display:block; color:var(--ink); font-size:16px; margin-bottom:4px}
+.chip{align-self:flex-start; background:var(--accent-soft); color:var(--accent-fg); border:1px solid var(--line); border-radius:999px; padding:6px 14px; font-weight:700; cursor:pointer; font-size:13px}
+.ov{position:fixed; inset:0; background:rgba(5,4,10,.66); z-index:50; display:flex; align-items:flex-end; justify-content:center}
+.sh{width:100%; max-width:560px; background:var(--surface); border:1px solid var(--line); border-bottom:0; border-radius:22px 22px 0 0; padding:18px 16px calc(18px + env(safe-area-inset-bottom, 0px)); max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:12px}
+.sh::before{content:""; width:44px; height:4px; border-radius:4px; background:var(--line); align-self:center; margin-top:-8px}
+.full{direction:ltr; text-align:left; font-size:13px; color:var(--accent-fg); word-break:break-all; background:var(--bg); border-radius:10px; padding:8px 10px}
+.acts{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.acts .btn{flex-direction:column; gap:2px; min-height:68px; font-size:14px}
+.acts .btn span{font-size:21px}
+.acts2{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.sw{display:flex; gap:10px; flex-wrap:wrap}
+.sw button{width:38px; height:38px; border-radius:50%; border:3px solid transparent; cursor:pointer}
+.sw button.on{border-color:#fff}
+.err{color:var(--bad); font-size:13px; min-height:18px}
+.warn{background:var(--warn-soft); color:var(--warn); border-radius:12px; padding:10px 12px; font-size:13px}
+.pwrow{display:flex; gap:8px}
+.pwrow input{flex:1}
+#toast{position:fixed; bottom:calc(24px + env(safe-area-inset-bottom, 0px)); left:50%; transform:translateX(-50%); background:var(--surface2); border:1px solid var(--line); color:var(--ink); padding:10px 18px; border-radius:999px; z-index:99; font-weight:700; max-width:90vw; text-align:center; box-shadow:0 6px 24px rgba(0,0,0,.5)}
+.fab{position:fixed; bottom:calc(20px + env(safe-area-inset-bottom, 0px)); left:max(18px, env(safe-area-inset-left, 0px)); width:58px; height:58px; border-radius:50%; background:var(--accent); color:#fff; font-size:30px; border:0; box-shadow:0 8px 22px rgba(109,79,224,.5); cursor:pointer; z-index:20}
+.shake{animation:sk .3s}
+@keyframes sk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="ov" id="ov" hidden><div class="sh" id="shbody"></div></div>
+<div id="toast" hidden></div>
+<input type="file" id="filein" accept=".txt,text/plain,*/*" hidden>
+<script>
+(function(){
+'use strict';
+var KEY = 'linkbox-v1', ITER = 210000;
+var COLORS = ['#8B6CFF','#2DD4BF','#F4B35E','#FF7A9A','#5BB4FF','#6EE7A0'];
+var db = load();
+var S = { view:'home', q:'', lq:'' };
+var sess = {};            // listId -> { key, items } for unlocked password lists
+var hiddenAt = 0, tmpColor = COLORS[0], pending = null, toastT = null;
+var enc = new TextEncoder(), dec = new TextDecoder();
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function plug(n){ var C = window.Capacitor; return (C && C.Plugins && C.Plugins[n]) || null; }
+
+/* ---------- storage ---------- */
+function load(){
+  try { var s = localStorage.getItem(KEY); if (s){ var d = JSON.parse(s); if (d && Array.isArray(d.lists)){ if (!d.created) d.created = Date.now(); return d; } } } catch(e){}
+  return { v:1, lists:[], lastBackup:0, created:Date.now() };
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e){ toast('مفيش مساحة كفاية للحفظ'); } }
+function L(id){ return db.lists.filter(function(l){ return l.id === id; })[0]; }
+function items(l){ return l.enc ? (sess[l.id] ? sess[l.id].items : null) : (l.items || []); }
+function isOpen(l){ return !l.enc || !!sess[l.id]; }
+
+/* ---------- crypto ---------- */
+function hasCrypto(){ return !!(window.crypto && crypto.subtle); }
+function b64(buf){ var a = new Uint8Array(buf), s = ''; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
+function unb64(s){ var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+async function deriveKey(pw, salt, iter){
+  var m = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name:'PBKDF2', salt:salt, iterations:iter, hash:'SHA-256' }, m, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']);
+}
+async function seal(key, obj, saltB64, iter){
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  var ct = await crypto.subtle.encrypt({ name:'AES-GCM', iv:iv }, key, enc.encode(JSON.stringify(obj)));
+  return { s:saltB64, i:b64(iv), c:b64(ct), k:iter };
+}
+async function unseal(key, e){
+  var pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv:unb64(e.i) }, key, unb64(e.c));
+  return JSON.parse(dec.decode(pt));
+}
+async function commit(l){
+  if (l.enc && sess[l.id]) l.enc = await seal(sess[l.id].key, sess[l.id].items, l.enc.s, l.enc.k);
+  save();
+}
+
+/* ---------- helpers ---------- */
+function toast(t){
+  var el = $('toast'); el.textContent = t; el.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(function(){ el.hidden = true; }, 2200);
+}
+function isUrl(t){
+  t = (t || '').trim();
+  if (!t || /\s/.test(t)) return false;
+  if (/^(mailto|tel|sms):/i.test(t)) return true;
+  if (/^[a-z][a-z0-9+.-]*:\/\/\S+$/i.test(t)) return true;
+  if (/^www\.\S+$/i.test(t)) return true;
+  return /^[\w-]+(\.[\w-]+)*\.[a-z]{2,}(:\d+)?([\/?#]\S*)?$/i.test(t);
+}
+function normUrl(t){ t = t.trim(); return /^[a-z][a-z0-9+.-]*:/i.test(t) && !/^[\w-]+\.[a-z]{2,}:\d+/i.test(t) ? t : 'https://' + t; }
+function host(t){ try { return new URL(normUrl(t)).hostname.replace(/^www\./, ''); } catch(e){ return ''; } }
+function shown(t){ return t.replace(/^[a-z][a-z0-9+.-]*:\/\/(www\.)?/i, '').replace(/\/$/, ''); }
+function titleOf(it){
+  if (it.title) return it.title;
+  if (isUrl(it.url)) return host(it.url) || it.url;
+  return it.url.length > 60 ? it.url.slice(0, 60) + '…' : it.url;
+}
+function dateStr(ts){ try { return new Date(ts).toLocaleDateString('ar-EG', { day:'numeric', month:'short', year:'numeric' }); } catch(e){ return ''; } }
+function ymd(){ var d = new Date(), p = function(n){ return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+
+async function copyText(t){
+  var P = plug('Clipboard');
+  try { if (P){ await P.write({ string:t }); return true; } } catch(e){}
+  try { await navigator.clipboard.writeText(t); return true; } catch(e){}
+  try { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); var ok = document.execCommand('copy'); ta.remove(); return ok; } catch(e){}
+  return false;
+}
+async function readClip(){
+  var P = plug('Clipboard');
+  try { if (P){ var r = await P.read(); return (r && r.value) || ''; } } catch(e){}
+  try { return await navigator.clipboard.readText(); } catch(e){}
+  return '';
+}
+async function openUrl(t){
+  var u = normUrl(t), B = plug('Browser');
+  if (/^https?:/i.test(u)){
+    try { if (B){ await B.open({ url:u }); return; } } catch(e){}
+    window.open(u, '_blank');
+  } else { window.location.href = u; }
+}
+async function shareText(it){
+  var P = plug('Share'), txt = it.url;
+  try {
+    if (P){ await P.share({ title:titleOf(it), text:txt, dialogTitle:'مشاركة' }); return; }
+    if (navigator.share){ await navigator.share({ title:titleOf(it), text:txt }); return; }
+  } catch(e){ return; }
+  if (await copyText(txt)) toast('المشاركة مش متاحة، اتنسخ بدلها');
+}
+
+/* ---------- sheet ---------- */
+function sheet(html){
+  $('shbody').innerHTML = html; $('ov').hidden = false;
+  var f = $('shbody').querySelector('[autofocus]'); if (f) setTimeout(function(){ f.focus(); }, 80);
+}
+function closeSheet(){ $('ov').hidden = true; $('shbody').innerHTML = ''; }
+function sheetOpen(){ return !$('ov').hidden; }
+function val(id){ var e = $(id); return e ? e.value : ''; }
+
+/* ---------- render ---------- */
+function render(){
+  var h;
+  if (S.view === 'home') h = homeHtml();
+  else if (S.view === 'backup') h = backupHtml();
+  else { var l = L(S.view); if (!l || !isOpen(l)){ S.view = 'home'; h = homeHtml(); } else h = listHtml(l); }
+  $('app').innerHTML = h;
+  if (S.view === 'home') homeBody();
+  else if (S.view !== 'backup') listBody(L(S.view));
+  window.scrollTo(0, 0);
+}
+
+function needBackup(){
+  if (!db.lists.length) return null;
+  var d = 86400000;
+  if (!db.lastBackup) return (Date.now() - db.created > 3 * d) ? 'لسه معملتش أي نسخة احتياطية' : null;
+  return (Date.now() - db.lastBackup > 7 * d) ? 'عدّى أكتر من أسبوع على آخر نسخة احتياطية' : null;
+}
+
+function homeHtml(){
+  var h = '<div class="topbar"><div class="tt"><h1>صندوق الروابط</h1><div class="muted">' + db.lists.length + ' قائمة</div></div>' +
+    '<button class="ibtn" data-a="goBackup" aria-label="نسخ احتياطي">💾</button></div>';
+  var nb = needBackup();
+  if (nb) h += '<div class="banner"><span><b>' + nb + '</b></span><button class="btn" data-a="goBackup">اعمل نسخة</button></div>';
+  if (db.lists.length) h += '<input type="search" id="q" placeholder="ابحث في كل القوائم المفتوحة…" value="' + esc(S.q) + '">';
+  if (Object.keys(sess).length) h += '<button class="chip" data-a="lockAll">🔒 اقفل كل القوائم المفتوحة</button>';
+  h += '<div id="body"></div>';
+  return h;
+}
+function homeBody(){
+  var q = S.q.trim().toLowerCase(), h = '';
+  if (q){
+    var n = 0;
+    db.lists.forEach(function(l){
+      var its = items(l); if (!its) return;
+      its.forEach(function(it){
+        if ((it.url + ' ' + (it.title || '') + ' ' + (it.note || '')).toLowerCase().indexOf(q) < 0) return;
+        n++; h += itemHtml(l, it, true);
+      });
+    });
+    h = n ? '<div class="list">' + h + '</div>' : '<div class="empty"><b>مفيش نتيجة</b>القوائم المقفولة مش بتظهر في البحث</div>';
+  } else {
+    h = '<div class="grid">';
+    db.lists.forEach(function(l){
+      var its = items(l), locked = l.enc && !sess[l.id];
+      h += '<button class="lc" data-a="openList" data-l="' + l.id + '"><span class="bar" style="background:' + esc(l.color || COLORS[0]) + '"></span>' +
+        '<span class="nm">' + esc(l.name) + '</span>' +
+        '<span class="meta"><span>' + (locked ? 'مقفولة' : (its ? its.length : 0) + ' رابط') + '</span><span>' + (l.enc ? (locked ? '🔒' : '🔓') : '') + '</span></span></button>';
+    });
+    h += '<button class="lc add" data-a="newListSheet">＋ قائمة جديدة</button></div>';
+    if (!db.lists.length) h = '<div class="empty"><b>ابدأ بأول قائمة</b>مثلاً «الشغل» أو «الأفلام» وحط فيها الروابط بتاعتها</div>' + h;
+  }
+  $('body').innerHTML = h;
+}
+
+function itemHtml(l, it, withList){
+  var sub = isUrl(it.url) ? shown(it.url) : '';
+  return '<button class="item" data-a="item" data-l="' + l.id + '" data-i="' + it.id + '"><span class="it-main">' +
+    (withList ? '<span class="tag">' + esc(l.name) + '</span>' : '') +
+    '<span class="it-title">' + esc(titleOf(it)) + '</span>' +
+    (sub && it.title ? '<span class="it-url">' + esc(sub) + '</span>' : (sub ? '<span class="it-url">' + esc(sub) + '</span>' : '')) +
+    (it.note ? '<span class="it-note">' + esc(it.note) + '</span>' : '') +
+    '</span><span class="it-dots">⋮</span></button>';
+}
+
+function listHtml(l){
+  return '<div class="topbar"><button class="ibtn" data-a="goHome" aria-label="رجوع">→</button>' +
+    '<div class="tt"><h1>' + (l.enc ? '🔓 ' : '') + esc(l.name) + '</h1><div class="muted">' + items(l).length + ' رابط</div></div>' +
+    '<button class="ibtn" data-a="listMenu" data-l="' + l.id + '" aria-label="خيارات القائمة">⋯</button></div>' +
+    '<div class="row"><button class="btn pri" data-a="quickPaste" data-l="' + l.id + '">📋 الصق من الحافظة</button>' +
+    '<button class="btn" data-a="addSheet" data-l="' + l.id + '">＋ إضافة يدوي</button></div>' +
+    '<input type="search" id="lq" placeholder="ابحث في القائمة…" value="' + esc(S.lq) + '">' +
+    '<div id="body"></div>';
+}
+function listBody(l){
+  var q = S.lq.trim().toLowerCase(), its = items(l).filter(function(it){
+    return !q || (it.url + ' ' + (it.title || '') + ' ' + (it.note || '')).toLowerCase().indexOf(q) >= 0;
+  });
+  var h;
+  if (!its.length) h = items(l).length ? '<div class="empty"><b>مفيش نتيجة</b></div>' : '<div class="empty"><b>القائمة فاضية</b>انسخ أي رابط وادوس «الصق من الحافظة»</div>';
+  else h = '<div class="list">' + its.map(function(it){ return itemHtml(l, it); }).join('') + '</div>';
+  $('body').innerHTML = h;
+}
+
+function backupHtml(){
+  var last = db.lastBackup ? dateStr(db.lastBackup) : 'لسه ما اتعملتش';
+  return '<div class="topbar"><button class="ibtn" data-a="goHome" aria-label="رجوع">→</button><div class="tt"><h1>النسخ الاحتياطي</h1><div class="muted">آخر نسخة: ' + last + '</div></div></div>' +
+    '<div class="card" style="display:flex;flex-direction:column;gap:10px"><h2>احفظ نسخة</h2>' +
+    '<p class="muted">بتطلعلك قايمة المشاركة: احفظ الملف في الملفات أو Google Drive أو ابعته لنفسك على واتساب.</p>' +
+    '<button class="btn pri block" data-a="backupFile">💾 حفظ نسخة كملف</button>' +
+    '<button class="btn block" data-a="backupCopy">📋 نسخ النسخة كنص</button>' +
+    '<p class="muted">القوائم المقفولة بتتحفظ مشفّرة جوه النسخة، ومحدش يقدر يقراها من غير الباسورد. القوائم العادية بتتحفظ نص عادي، فخلي الملف عندك.</p></div>' +
+    '<div class="card" style="display:flex;flex-direction:column;gap:10px"><h2>استرجاع</h2>' +
+    '<button class="btn block" data-a="pickFile">📂 استرجاع من ملف</button>' +
+    '<label class="f">أو الصق نص النسخة هنا<textarea id="rtext" dir="ltr" placeholder="LINKBOX1:…"></textarea></label>' +
+    '<button class="btn block" data-a="restoreText">استرجاع من النص</button></div>';
+}
+
+/* ---------- actions ---------- */
+var A = {};
+A.closeSheet = closeSheet;
+A.goHome = function(){ S.view = 'home'; S.lq = ''; render(); };
+A.goBackup = function(){ S.view = 'backup'; render(); };
+A.lockAll = function(){ sess = {}; toast('اتقفلت كل القوائم'); render(); };
+
+A.openList = function(d){
+  var l = L(d.l); if (!l) return;
+  if (l.enc && !sess[l.id]) return unlockSheet(l);
+  S.view = l.id; S.lq = ''; render();
+};
+
+/* --- lists --- */
+function colorSw(){
+  return '<div class="sw">' + COLORS.map(function(c){ return '<button type="button" data-a="pickColor" data-c="' + c + '" class="' + (c === tmpColor ? 'on' : '') + '" style="background:' + c + '" aria-label="لون"></button>'; }).join('') + '</div>';
+}
+A.pickColor = function(d){
+  tmpColor = d.c;
+  var b = $('shbody').querySelectorAll('.sw button'); for (var i = 0; i < b.length; i++) b[i].classList.toggle('on', b[i].dataset.c === tmpColor);
+};
+A.newListSheet = function(){
+  tmpColor = COLORS[db.lists.length % COLORS.length];
+  sheet('<h3>قائمة جديدة</h3><label class="f">اسم القائمة<input type="text" id="nm" maxlength="40" autofocus data-enter="createList"></label>' + colorSw() +
+    '<button class="btn pri block" data-a="createList">إنشاء</button>');
+};
+A.createList = function(){
+  var n = val('nm').trim(); if (!n) return toast('اكتب اسم القائمة');
+  var l = { id:uid(), name:n, color:tmpColor, items:[] };
+  db.lists.push(l); save(); closeSheet(); S.view = l.id; S.lq = ''; render();
+};
+A.listMenu = function(d){
+  var l = L(d.l); if (!l) return;
+  var h = '<h3>' + esc(l.name) + '</h3><div class="list">';
+  h += '<button class="btn block" data-a="renameSheet" data-l="' + l.id + '">✏️ تغيير الاسم واللون</button>';
+  if (!l.enc) h += '<button class="btn block" data-a="lockSheet" data-l="' + l.id + '">🔒 قفل القائمة بباسورد</button>';
+  else if (sess[l.id]) {
+    h += '<button class="btn block" data-a="lockNow" data-l="' + l.id + '">🔒 اقفلها دلوقتي</button>';
+    h += '<button class="btn block" data-a="pwSheet" data-l="' + l.id + '">🔑 تغيير الباسورد</button>';
+    h += '<button class="btn block" data-a="unprotectAsk" data-l="' + l.id + '">🔓 شيل الباسورد</button>';
+  }
+  var i = db.lists.indexOf(l);
+  h += '<div class="row"><button class="btn" data-a="moveList" data-l="' + l.id + '" data-d="-1"' + (i === 0 ? ' disabled' : '') + '>⬆️ فوق</button>' +
+       '<button class="btn" data-a="moveList" data-l="' + l.id + '" data-d="1"' + (i === db.lists.length - 1 ? ' disabled' : '') + '>⬇️ تحت</button></div>';
+  h += '<button class="btn bad block" data-a="delListAsk" data-l="' + l.id + '">🗑 مسح القائمة</button></div>';
+  sheet(h);
+};
+A.renameSheet = function(d){
+  var l = L(d.l); tmpColor = l.color || COLORS[0];
+  sheet('<h3>تعديل القائمة</h3><label class="f">الاسم<input type="text" id="nm" maxlength="40" value="' + esc(l.name) + '" autofocus data-enter="doRename" data-l="' + l.id + '"></label>' + colorSw() +
+    '<button class="btn pri block" data-a="doRename" data-l="' + l.id + '">حفظ</button>');
+};
+A.doRename = function(d){
+  var l = L(d.l), n = val('nm').trim(); if (!n) return toast('اكتب اسم القائمة');
+  l.name = n; l.color = tmpColor; save(); closeSheet(); render();
+};
+A.moveList = function(d){
+  var i = db.lists.findIndex(function(x){ return x.id === d.l; }), j = i + (+d.d);
+  if (j < 0 || j >= db.lists.length) return;
+  var t = db.lists[i]; db.lists[i] = db.lists[j]; db.lists[j] = t; save(); A.listMenu({ l:d.l }); render();
+};
+A.delListAsk = function(d){
+  var l = L(d.l), its = items(l);
+  sheet('<h3>مسح «' + esc(l.name) + '»؟</h3><div class="warn">' + (its ? 'هتتمسح القائمة بكل الـ ' + its.length + ' رابط اللي فيها.' : 'القائمة المقفولة هتتمسح بكل اللي فيها.') + ' مفيش رجوع، إلا لو عندك نسخة احتياطية.</div>' +
+    '<button class="btn bad block" data-a="delListDo" data-l="' + l.id + '">أيوه، امسحها</button><button class="btn block" data-a="closeSheet">إلغاء</button>');
+};
+A.delListDo = function(d){
+  db.lists = db.lists.filter(function(x){ return x.id !== d.l; }); delete sess[d.l]; save(); closeSheet(); S.view = 'home'; render(); toast('اتمسحت');
+};
+
+/* --- passwords --- */
+function pwField(id, label, auto, enter){
+  return '<label class="f">' + label + '<span class="pwrow"><input type="password" id="' + id + '" autocomplete="off"' + (auto ? ' autofocus' : '') + (enter ? ' data-enter="' + enter.a + '" data-l="' + enter.l + '"' : '') + '>' +
+    '<button type="button" class="ibtn" data-a="togglePw" data-t="' + id + '" aria-label="إظهار">👁</button></span></label>';
+}
+A.togglePw = function(d){ var e = $(d.t); e.type = e.type === 'password' ? 'text' : 'password'; };
+function unlockSheet(l){
+  sheet('<h3>🔒 ' + esc(l.name) + '</h3><p class="muted">اكتب الباسورد عشان تشوف الروابط.</p>' + pwField('pw', 'الباسورد', true, { a:'doUnlock', l:l.id }) +
+    '<div class="err" id="err"></div><button class="btn pri block" data-a="doUnlock" data-l="' + l.id + '">فتح</button>');
+}
+A.doUnlock = async function(d){
+  var l = L(d.l), pw = val('pw'), er = $('err'); if (!pw) return;
+  if (!hasCrypto()) { er.textContent = 'التشفير مش مدعوم على الجهاز ده'; return; }
+  er.textContent = 'جاري الفتح…';
+  try {
+    var key = await deriveKey(pw, unb64(l.enc.s), l.enc.k), its = await unseal(key, l.enc);
+    sess[l.id] = { key:key, items:its }; closeSheet(); S.view = l.id; S.lq = ''; render();
+  } catch(e){
+    er.textContent = 'الباسورد غلط'; var s = $('shbody'); s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+  }
+};
+A.lockSheet = function(d){
+  var l = L(d.l);
+  if (!hasCrypto()) return toast('التشفير مش مدعوم على الجهاز ده');
+  sheet('<h3>قفل «' + esc(l.name) + '»</h3><div class="warn">الروابط هتتشفّر بالباسورد. لو نسيته مفيش أي طريقة ترجعها، حتى أنا مقدرش. اكتبه في مكان أمان.</div>' +
+    pwField('pw1', 'الباسورد (4 حروف أو أكتر)', true) + pwField('pw2', 'اكتبه تاني', false, { a:'doLock', l:l.id }) +
+    '<div class="err" id="err"></div><button class="btn pri block" data-a="doLock" data-l="' + l.id + '">قفل القائمة</button>');
+};
+A.doLock = async function(d){
+  var l = L(d.l), a = val('pw1'), b = val('pw2'), er = $('err');
+  if (a.length < 4) { er.textContent = 'الباسورد لازم يكون 4 حروف على الأقل'; return; }
+  if (a !== b) { er.textContent = 'الباسوردين مش زي بعض'; return; }
+  er.textContent = 'جاري التشفير…';
+  var salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveKey(a, salt, ITER), its = l.items || [];
+  l.enc = await seal(key, its, b64(salt), ITER); delete l.items; sess[l.id] = { key:key, items:its };
+  save(); closeSheet(); render(); toast('القائمة اتقفلت 🔒');
+};
+A.lockNow = function(d){ delete sess[d.l]; closeSheet(); S.view = 'home'; render(); toast('اتقفلت'); };
+A.pwSheet = function(d){
+  sheet('<h3>تغيير الباسورد</h3>' + pwField('pw1', 'الباسورد الجديد', true) + pwField('pw2', 'اكتبه تاني', false, { a:'doPw', l:d.l }) +
+    '<div class="err" id="err"></div><button class="btn pri block" data-a="doPw" data-l="' + d.l + '">حفظ</button>');
+};
+A.doPw = async function(d){
+  var l = L(d.l), a = val('pw1'), b = val('pw2'), er = $('err');
+  if (a.length < 4) { er.textContent = 'الباسورد لازم يكون 4 حروف على الأقل'; return; }
+  if (a !== b) { er.textContent = 'الباسوردين مش زي بعض'; return; }
+  er.textContent = 'جاري التشفير…';
+  var salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveKey(a, salt, ITER);
+  sess[l.id].key = key; l.enc = await seal(key, sess[l.id].items, b64(salt), ITER);
+  save(); closeSheet(); toast('الباسورد اتغيّر');
+};
+A.unprotectAsk = function(d){
+  sheet('<h3>شيل الباسورد؟</h3><div class="warn">الروابط هتبقى ظاهرة من غير باسورد وتتحفظ في النسخ الاحتياطية بنص عادي.</div>' +
+    '<button class="btn bad block" data-a="unprotectDo" data-l="' + d.l + '">شيل الباسورد</button><button class="btn block" data-a="closeSheet">إلغاء</button>');
+};
+A.unprotectDo = function(d){
+  var l = L(d.l); l.items = sess[l.id].items; delete l.enc; delete sess[l.id]; save(); closeSheet(); render(); toast('الباسورد اتشال');
+};
+
+/* --- items --- */
+function parseInput(text){
+  text = (text || '').trim(); if (!text) return [];
+  var tk = text.split(/\s+/);
+  return (tk.length > 1 && tk.every(isUrl)) ? tk : [text];
+}
+async function addTexts(l, texts, title, note){
+  var its = items(l), added = 0, dup = 0;
+  texts.forEach(function(t){
+    if (its.some(function(x){ return x.url === t; })) { dup++; return; }
+    its.unshift({ id:uid(), url:t, title:texts.length === 1 ? (title || '') : '', note:texts.length === 1 ? (note || '') : '', ts:Date.now() }); added++;
+  });
+  if (added){
+    if (!l.enc) l.items = its;
+    await commit(l);
+  }
+  return { added:added, dup:dup };
+}
+A.quickPaste = async function(d){
+  var l = L(d.l), t = await readClip();
+  if (!t || !t.trim()) return toast('الحافظة فاضية، أو التطبيق مش مسموحله يقراها');
+  var r = await addTexts(l, parseInput(t));
+  if (r.added) toast(r.added > 1 ? 'اتضاف ' + r.added + ' روابط ✓' : 'اتضاف ✓'); else toast('ده موجود قبل كده');
+  render();
+};
+A.addSheet = function(d){
+  sheet('<h3>إضافة رابط</h3><label class="f">الرابط أو النص<textarea id="u" dir="ltr" autofocus></textarea></label>' +
+    '<button class="btn block" data-a="pasteInto">📋 لصق من الحافظة</button>' +
+    '<label class="f">اسم (اختياري)<input type="text" id="t" maxlength="80"></label>' +
+    '<label class="f">ملاحظة (اختياري)<input type="text" id="n" maxlength="200"></label>' +
+    '<button class="btn pri block" data-a="doAdd" data-l="' + d.l + '">حفظ</button>');
+};
+A.pasteInto = async function(){ var t = await readClip(); if (t) $('u').value = t.trim(); else toast('الحافظة فاضية'); };
+A.doAdd = async function(d){
+  var l = L(d.l), tx = parseInput(val('u'));
+  if (!tx.length) return toast('اكتب الرابط');
+  var r = await addTexts(l, tx, val('t').trim(), val('n').trim());
+  closeSheet(); render(); toast(r.added ? 'اتضاف ✓' : 'ده موجود قبل كده');
+};
+function findItem(d){ var l = L(d.l); if (!l) return {}; var its = items(l) || []; return { l:l, it:its.filter(function(x){ return x.id === d.i; })[0] }; }
+A.item = function(d){
+  var f = findItem(d); if (!f.it) return;
+  var it = f.it, url = isUrl(it.url);
+  sheet('<h3>' + esc(titleOf(it)) + '</h3><div class="full">' + esc(it.url) + '</div>' +
+    (it.note ? '<p class="muted">' + esc(it.note) + '</p>' : '') + '<div class="muted">اتضاف ' + dateStr(it.ts) + '</div>' +
+    '<div class="acts"><button class="btn pri" data-a="icopy" data-l="' + d.l + '" data-i="' + d.i + '"><span>📋</span>نسخ</button>' +
+    (url ? '<button class="btn" data-a="iopen" data-l="' + d.l + '" data-i="' + d.i + '"><span>🔗</span>فتح</button>' : '<button class="btn" disabled><span>🔗</span>فتح</button>') +
+    '<button class="btn" data-a="ishare" data-l="' + d.l + '" data-i="' + d.i + '"><span>📤</span>مشاركة</button></div>' +
+    '<div class="acts2"><button class="btn" data-a="iedit" data-l="' + d.l + '" data-i="' + d.i + '">✏️ تعديل</button>' +
+    '<button class="btn" data-a="imove" data-l="' + d.l + '" data-i="' + d.i + '">📂 نقل</button>' +
+    '<button class="btn bad" data-a="idelAsk" data-l="' + d.l + '" data-i="' + d.i + '">🗑 مسح</button></div>');
+};
+A.icopy = async function(d){ var f = findItem(d); closeSheet(); toast(await copyText(f.it.url) ? 'اتنسخ ✓' : 'مقدرتش أنسخ'); };
+A.iopen = function(d){ var f = findItem(d); closeSheet(); openUrl(f.it.url); };
+A.ishare = function(d){ var f = findItem(d); closeSheet(); shareText(f.it); };
+A.iedit = function(d){
+  var it = findItem(d).it;
+  sheet('<h3>تعديل</h3><label class="f">الرابط أو النص<textarea id="u" dir="ltr">' + esc(it.url) + '</textarea></label>' +
+    '<label class="f">الاسم<input type="text" id="t" maxlength="80" value="' + esc(it.title || '') + '"></label>' +
+    '<label class="f">ملاحظة<input type="text" id="n" maxlength="200" value="' + esc(it.note || '') + '"></label>' +
+    '<button class="btn pri block" data-a="doEdit" data-l="' + d.l + '" data-i="' + d.i + '">حفظ</button>');
+};
+A.doEdit = async function(d){
+  var f = findItem(d), u = val('u').trim(); if (!u) return toast('الرابط فاضي');
+  f.it.url = u; f.it.title = val('t').trim(); f.it.note = val('n').trim();
+  await commit(f.l); closeSheet(); render(); toast('اتعدّل ✓');
+};
+A.imove = function(d){
+  var h = '<h3>نقل لقائمة</h3><div class="list">', n = 0;
+  db.lists.forEach(function(l){
+    if (l.id === d.l || !isOpen(l)) return; n++;
+    h += '<button class="btn block" data-a="doMove" data-l="' + d.l + '" data-i="' + d.i + '" data-t="' + l.id + '">' + (l.enc ? '🔓 ' : '') + esc(l.name) + '</button>';
+  });
+  if (!n) h += '<div class="empty">مفيش قوائم تانية مفتوحة</div>';
+  sheet(h + '</div>');
+};
+A.doMove = async function(d){
+  var f = findItem(d), t = L(d.t), src = items(f.l), dst = items(t);
+  var idx = src.indexOf(f.it); src.splice(idx, 1); dst.unshift(f.it);
+  if (!f.l.enc) f.l.items = src; if (!t.enc) t.items = dst;
+  await commit(f.l); await commit(t); closeSheet(); render(); toast('اتنقل لـ «' + t.name + '»');
+};
+A.idelAsk = function(d){
+  sheet('<h3>مسح الرابط؟</h3><button class="btn bad block" data-a="idelDo" data-l="' + d.l + '" data-i="' + d.i + '">أيوه، امسحه</button><button class="btn block" data-a="closeSheet">إلغاء</button>');
+};
+A.idelDo = async function(d){
+  var f = findItem(d), its = items(f.l); its.splice(its.indexOf(f.it), 1);
+  if (!f.l.enc) f.l.items = its; await commit(f.l); closeSheet(); render(); toast('اتمسح');
+};
+
+/* --- backup --- */
+function backupText(){ return 'LINKBOX1:' + JSON.stringify(db); }
+A.backupFile = async function(){
+  var text = backupText(), FS = plug('Filesystem'), SH = plug('Share'), name = 'linkbox-backup-' + ymd() + '.txt';
+  try {
+    if (FS && SH){
+      await FS.writeFile({ path:name, data:text, directory:'CACHE', encoding:'utf8' });
+      var u = await FS.getUri({ path:name, directory:'CACHE' });
+      await SH.share({ title:'نسخة احتياطية - صندوق الروابط', url:u.uri, dialogTitle:'احفظ النسخة الاحتياطية' });
+    } else {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type:'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    }
+    db.lastBackup = Date.now(); save(); render(); toast('تمام ✓');
+  } catch(e){ if (!/cancel/i.test(String(e && (e.message || e)))) toast('معرفتش أعمل النسخة'); }
+};
+A.backupCopy = async function(){
+  if (await copyText(backupText())){ db.lastBackup = Date.now(); save(); render(); toast('اتنسخت، الصقها في مكان أمان'); } else toast('مقدرتش أنسخ');
+};
+A.pickFile = function(){ $('filein').value = ''; $('filein').click(); };
+function tryRestore(raw){
+  try {
+    raw = (raw || '').trim().replace(/^LINKBOX1:/, '');
+    var d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.lists)) throw 0;
+    var ok = d.lists.filter(function(l){ return l && typeof l.id === 'string' && typeof l.name === 'string' && (Array.isArray(l.items) || (l.enc && l.enc.c)); });
+    if (!ok.length && d.lists.length) throw 0;
+    d.lists = ok; pending = d;
+    sheet('<h3>لقيت ' + ok.length + ' قائمة في النسخة</h3><p class="muted">تحب تعمل إيه؟</p>' +
+      '<button class="btn pri block" data-a="restoreDo" data-m="merge">دمج مع اللي عندي</button>' +
+      '<button class="btn bad block" data-a="restoreDo" data-m="replace">استبدال كل حاجة بالنسخة</button>' +
+      '<button class="btn block" data-a="closeSheet">إلغاء</button>');
+  } catch(e){ toast('النسخة دي مش مظبوطة أو ناقصة'); }
+}
+A.restoreText = function(){ tryRestore(val('rtext')); };
+A.restoreDo = function(d){
+  if (!pending) return;
+  if (d.m === 'replace'){ db.lists = pending.lists; }
+  else pending.lists.forEach(function(l){
+    var i = db.lists.findIndex(function(x){ return x.id === l.id; });
+    if (i >= 0) db.lists[i] = l; else db.lists.push(l);
+  });
+  sess = {}; pending = null; db.lastBackup = Date.now(); save(); closeSheet(); S.view = 'home'; render(); toast('اتسترجعت ✓');
+};
+$('filein').addEventListener('change', function(){
+  var f = this.files && this.files[0]; if (!f) return;
+  var r = new FileReader(); r.onload = function(){ tryRestore(String(r.result)); }; r.onerror = function(){ toast('مقدرتش أقرا الملف'); }; r.readAsText(f);
+});
+
+/* ---------- events ---------- */
+document.addEventListener('click', function(e){
+  if (e.target.id === 'ov') { closeSheet(); return; }
+  var el = e.target.closest('[data-a]'); if (!el) return;
+  var fn = A[el.dataset.a]; if (fn){ e.preventDefault(); fn(el.dataset, el); }
+});
+document.addEventListener('keydown', function(e){
+  if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
+  var a = e.target.dataset && e.target.dataset.enter; if (a && A[a]){ e.preventDefault(); A[a](e.target.dataset); }
+});
+document.addEventListener('input', function(e){
+  if (e.target.id === 'q'){ S.q = e.target.value; homeBody(); }
+  else if (e.target.id === 'lq'){ S.lq = e.target.value; var l = L(S.view); if (l) listBody(l); }
+});
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden) hiddenAt = Date.now();
+  else if (hiddenAt && Date.now() - hiddenAt > 60000 && Object.keys(sess).length){ sess = {}; closeSheet(); if (S.view !== 'home' && S.view !== 'backup') S.view = 'home'; render(); toast('اتقفلت القوائم تلقائي'); }
+});
+
+function goBack(){
+  if (sheetOpen()){ closeSheet(); return true; }
+  if (S.view !== 'home'){ A.goHome(); return true; }
+  return false;
+}
+var AP = plug('App');
+if (AP && AP.addListener) AP.addListener('backButton', function(){ if (!goBack() && AP.exitApp) AP.exitApp(); });
+
+render();
+window.__lb = { db:function(){ return db; }, sess:function(){ return sess; }, ITER:ITER };
+})();
+</script>
+</body>
+</html>
